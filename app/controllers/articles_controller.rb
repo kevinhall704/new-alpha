@@ -26,21 +26,21 @@ class ArticlesController < ApplicationController
     
    def update
 
-@article = Article.find(params[:id])
+    @article = Article.find(params[:id])
+    
+    if @article.update(article_params)
+    
+    flash[:notice] = "Article was successfully updated"
+    
+    redirect_to article_path(@article)
+    
+    else
+    
+    render 'edit'
 
-if @article.update(article_params)
+    end
 
-flash[:notice] = "Article was successfully updated"
-
-redirect_to article_path(@article)
-
-else
-
-render 'edit'
-
-end
-
-end
+   end
     def show
         @article = Article.find(params[:id])
     end
@@ -51,3 +51,10 @@ end
           params.require(:article).permit(:title, :description)
         end
 end
+
+    def destroy
+        @article = Article.find(params[:id])
+        @article.destroy
+        flash[:notice] = "Article was successfully deleted"
+        redirect_to articles_path
+    end
